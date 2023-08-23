@@ -18,9 +18,18 @@ export default function Home() {
   const [givenAnswers, setAnswer] = useState<string[]>([]);
   const [correctAnswer, setCorrectAnswer] = useState<boolean[]>([]);
 
+  const elToScroll = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     fetchQuestions();
   }, []);
+
+  useEffect(() => {
+    if (elToScroll.current) {
+      elToScroll.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [givenAnswers]);
+
 
   const newGame = async () => {
     setQuestions([]);
@@ -62,7 +71,7 @@ export default function Home() {
 
   return (
     <main
-      className={`flex min-h-screen max-w-screen-lg m-auto flex-col justify-between  ${inter.className}`}
+      className={`flex min-h-screen max-w-screen-lg m-auto flex-col  ${inter.className}`}
     >
       <h1 className="mb-5 text-5xl p-5 font-medium text-gray-900 dark:text-white">
         {" "}
@@ -72,8 +81,8 @@ export default function Home() {
         <div
           className={
             givenAnswers.length >= i
-              ? `flex flex-col flex-1 p-6 transition-opacity  `
-              : "opacity-0"
+              ? `flex grow-0 flex-col flex-1 p-6 transition-opacity  `
+              : "opacity-0 hidden"
           }
           key={i}
         >
@@ -177,6 +186,7 @@ export default function Home() {
           )}
         </div>
       )}
+      <div ref={elToScroll}></div>
     </main>
   );
 }
